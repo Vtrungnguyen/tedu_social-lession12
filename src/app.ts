@@ -1,5 +1,5 @@
 import { Logger } from './core/utils';
-import { Route } from 'core/interface';
+import { Route } from './core/interface';
 import express, { Router } from 'express'
 import mongoose from 'mongoose'
 import hpp from 'hpp';
