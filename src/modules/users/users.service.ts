@@ -16,7 +16,7 @@ class UserService {
             throw new HttpException(400, 'Model is empty !');
         }
 
-        const user = this.userSchema.findOne({ email: model.email });
+        const user = await this.userSchema.findOne({ email: model.email });
         if (user) {
             throw new HttpException(409, `Your email ${model.email} already exit.`);
         }
@@ -39,7 +39,7 @@ class UserService {
         return this.createToken(createdUser);
     }
     private createToken(user: IUser): TokenData {
-        const dataInToken: DataStoreInToken = { id: user._id };
+        const dataInToken: DataStoredInToken = { id: user._id };
         const secret: string = process.env.JWT_TOKEN_SECRET!;
         const expiresIn: number = 3600;
         return {

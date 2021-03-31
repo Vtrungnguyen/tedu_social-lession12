@@ -1,4 +1,4 @@
-export interface DataStoreInToken {
+export interface DataStoredInToken {
     id: string;
 }
 
