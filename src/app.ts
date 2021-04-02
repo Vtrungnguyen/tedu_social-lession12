@@ -22,6 +22,7 @@ class App {
         this.connectToDatabase();
         this.initializeMiddleware();
         this.initializeRoutes(routes);
+        this.initializeErrorMiddleware();
 
     }
 
@@ -40,9 +41,13 @@ class App {
             this.app.use(morgan("dev"));
             this.app.use(cors({ origin: 'your.domain.com', credentials: true }));
         }
-        this.app.use(errorMiddleware)
+
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+
+    }
+    private initializeErrorMiddleware() {
+        this.app.use(errorMiddleware);
     }
 
     public listen() {
