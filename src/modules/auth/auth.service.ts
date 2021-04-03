@@ -8,35 +8,24 @@ import bcryptjs from 'bcryptjs'
 import IUser from './users.interface';
 import jwt from 'jsonwebtoken';
 import { DataStoredInToken } from './../auth/auth.interface';
-class UserService {
+import LoginDto from './auth.dto';
+import IUser from '@modules/users/users.interface';
+class AuthorService {
     public userSchema = UserSchema;
 
-    public async createUser(model: RegisterDto): Promise<TokenData> {
+    public async login(model: LoginDto): Promise<TokenData> {
         if (isEmptyObject(model)) {
             throw new HttpException(400, 'Model is empty !');
         }
 
-        const user = await this.userSchema.findOne({ email: model.email });
-        if (user) {
-            throw new HttpException(409, `Your email ${model.email} already exit.`);
+        const user: IUser = await this.userSchema.findOne({ email: model.email });
+        if (!user) {
+            throw new HttpException(409, `Your email ${model.email} is not exit.`);// tim khong co thi bao ko ton tai
         }
+        const isMatchPassword = bcryptjs.compare(model.password,user.password);
+        if(!isMatchPassword) throw new HttpException(400,'Credetials is not valid');
 
-        const avatar = gravatar.url(model.email!, {
-            size: '200',
-            rating: 'g',
-            default: 'mm',
-        });
-
-        const salt = await bcryptjs.genSalt(10);
-
-        const hashedPassword = await bcryptjs.hash(model.password!, salt);
-        const createdUser: IUser = await this.userSchema.create({
-            ...model,
-            password: hashedPassword,
-            avatar: avatar,
-            date: Date.now(),
-        });
-        return this.createToken(createdUser);
+        return this.createToken(user);
     }
     private createToken(user: IUser): TokenData {
         const dataInToken: DataStoredInToken = { id: user._id };
@@ -47,6 +36,6 @@ class UserService {
         }
     }
 }
-export default UserService;
+export default AuthorService;
 
 //cai bcryptjs la 1 thu vien ma hoa
