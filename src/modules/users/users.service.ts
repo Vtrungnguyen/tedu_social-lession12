@@ -1,6 +1,6 @@
 import { HttpException } from '@core/exceptions';
 import { isEmptyObject } from '@core/utils/helpers';
-import { DataStoreInToken, TokenData } from '@modules/auth';
+import { TokenData } from '@modules/auth';
 import RegisterDto from './dtos/register.dto';
 import UserSchema from './users.model'
 import gravatar from 'gravatar'
@@ -48,5 +48,3 @@ class UserService {
     }
 }
 export default UserService;
-
-//cai bcryptjs la 1 thu vien ma hoa

@@ -1,3 +1,4 @@
+
 export default interface IUser {
     _id: string;
     first_name: string;
@@ -5,4 +6,5 @@ export default interface IUser {
     email: string;
     password: string;
     avatar: string;
+    date: Date;
 }
