@@ -13,6 +13,10 @@ const validationMiddleware = (type: any, skipMissingProperties = false): Request
                 }).join(",");
                 next(new HttpException(400, messages));
             }
+            else
+            {
+                next();
+            }
         });
     }
 };

@@ -48,9 +48,18 @@ class UserService {
         if (!user) {
             throw new HttpException(400, `User ${userId} is not exist`);
         }
-
-        if (user.email === model.email)
+        let avatar = user.avatar;
+        if (user.email === model.email) {
             throw new HttpException(400, `You must using the difference email`);
+        }
+        else {
+            avatar = gravatar.url(model.email!, {
+                size: '200',
+                rating: 'g',
+                default: 'mm',
+            });
+
+        }
 
         let updateUserById;
         if (model.password) {
@@ -58,12 +67,14 @@ class UserService {
             const hashedPassword = await bcryptjs.hash(model.password, salt);
             updateUserById = await this.userSchema.findByIdAndUpdate(userId, {
                 ...model,
+                avatar: avatar,
                 password: hashedPassword,
             }).exec();
         }
         else {
             updateUserById = await this.userSchema.findByIdAndUpdate(userId, {
                 ...model,
+                avatar: avatar,
             }).exec();
         }
 
