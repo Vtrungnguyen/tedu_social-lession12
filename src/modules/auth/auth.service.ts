@@ -31,7 +31,7 @@ class AuthService {
 
     public async getCurrentLoginUser(userID: string): Promise<IUser> {
 
-        const user = await this.userSchema.findById(userID);
+        const user = await this.userSchema.findById(userID).exec();
         if (!user) {
             throw new HttpException(404, `User is not exists`);
         }
