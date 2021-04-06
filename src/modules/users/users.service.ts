@@ -10,7 +10,7 @@ import jwt from 'jsonwebtoken';
 import { DataStoredInToken } from './../auth/auth.interface';
 class UserService {
     public userSchema = UserSchema;
-// create User
+    // create User
     public async createUser(model: RegisterDto): Promise<TokenData> {
         if (isEmptyObject(model)) {
             throw new HttpException(400, 'Model is empty !');
@@ -38,8 +38,8 @@ class UserService {
         });
         return this.createToken(createdUser);
     }
-//Update User
-    public async updateUser(userId: string,model: RegisterDto): Promise<IUser> {
+    //Update User
+    public async updateUser(userId: string, model: RegisterDto): Promise<IUser> {
         if (isEmptyObject(model)) {
             throw new HttpException(400, 'Model is empty !');
         }
@@ -49,26 +49,26 @@ class UserService {
             throw new HttpException(400, `User ${userId} is not exist`);
         }
 
-        if(user.email === model.email)
-        throw new HttpException(400,`You must using the difference email`);
+        if (user.email === model.email)
+            throw new HttpException(400, `You must using the difference email`);
 
         let updateUserById;
-        if(model.password){
+        if (model.password) {
             const salt = await bcryptjs.genSalt(10);
-            const hashedPassword = await bcryptjs.hash(model.password,salt);
-            updateUserById = await this.userSchema.findByIdAndUpdate(userId,{
+            const hashedPassword = await bcryptjs.hash(model.password, salt);
+            updateUserById = await this.userSchema.findByIdAndUpdate(userId, {
                 ...model,
                 password: hashedPassword,
             }).exec();
         }
-        else{
-            updateUserById = await this.userSchema.findByIdAndUpdate(userId,{
+        else {
+            updateUserById = await this.userSchema.findByIdAndUpdate(userId, {
                 ...model,
             }).exec();
         }
 
-    if(!updateUserById) throw new HttpException(409,`You are not an user`);
-    return updateUserById;
+        if (!updateUserById) throw new HttpException(409, `You are not an user`);
+        return updateUserById;
     }
 
 
